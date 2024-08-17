@@ -17,7 +17,12 @@ We recommend [xFormers](https://github.com/facebookresearch/xformers) for both i
 Install xFormers from `pip`:
 
 ```bash
+# For CPU
 pip install xformers
+# For CUDA version 11.8
+pip install -U xformers --index-url https://download.pytorch.org/whl/cu118
+# For CUDA version 12.1
+pip install -U xformers --index-url https://download.pytorch.org/whl/cu121
 ```
 
 <Tip>
@@ -26,7 +31,21 @@ The xFormers `pip` package requires the latest version of PyTorch. If you need t
 
 </Tip>
 
-After xFormers is installed, you can use `enable_xformers_memory_efficient_attention()` for faster inference and reduced memory consumption as shown in this [section](memory#memory-efficient-attention).
+After xFormers is installed, you can use the `enable_xformers_memory_efficient_attention()` function for faster inference and reduced memory consumption as shown in this [section](memory#memory-efficient-attention).
+
+Using xFormers:
+
+```py
+from diffusers import DiffusionPipeline
+import torch
+
+# Load a model
+pipeline = DiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16)
+pipeline.to("cuda") # Assuming you are using CUDA instead of CPU
+
+# Enable xformers
+pipeline.enable_xformers_memory_efficient_attention()
+```
 
 <Tip warning={true}>
 
